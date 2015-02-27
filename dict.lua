@@ -35,7 +35,7 @@ local decode = require('cjson.safe').decode;
 -- class
 local CacheDict = require('halo').class.CacheDict;
 
-function CacheDict:init( ttl, name )
+function CacheDict:init( name, ttl )
     local dict = ngx.shared[name];
     
     if not dict then
