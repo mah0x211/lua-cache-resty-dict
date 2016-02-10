@@ -47,11 +47,19 @@ function CacheDict:init( name, ttl )
 end
 
 
-function CacheDict:get( key )
-    local res, err = protected(self).dict:get( key );
+function CacheDict:get( key, ttl )
+    local dict = protected(self).dict;
+    local res, err = dict:get( key );
     
     if res == nil then
         return nil, err;
+    -- update ttl
+    elseif ttl ~= nil then
+        local ok;
+        ok, err = dict:safe_set( key, res, ttl > 0 and ttl or 0 );
+        if not ok then
+            return nil, err;
+        end
     end
     
     return decode( res );
